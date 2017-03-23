@@ -5724,7 +5724,7 @@ var App = {};
 
 App.draw = SVG('drawing').size(906, 394);
 App.Group = App.draw.nested();
-App.viewbox = App.draw.viewbox(0, 0, 700, 200);
+App.viewbox = App.draw.viewbox(0, 0, 906, 394);
 console.log(App.viewbox.zoom);
 
 App.image = App.Group.image('/images/map.png').loaded(function(loader) {
@@ -5781,7 +5781,7 @@ App.Hal = App.Group.polygon(App.GetCoordinates(App.HalConfig)).fill('#f10');
 App.Hal.x(136).y(125);
 App.Hal.attr({ 'fill': '#f10', 'fill-opacity': 0.5 });
 
-App.Group.draggable();
+// App.Group.draggable();
 console.log("Zoom: " + App.viewbox.zoom);
 App.Group.size(50);
 
