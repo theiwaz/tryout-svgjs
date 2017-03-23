@@ -4,7 +4,7 @@ var $ = require('jquery');
 
 
 var App = {};
-App.ScaleFactor = 0.425;
+App.ScaleFactor = 0.4224;
 App.draw = SVG('drawing').size(935, 647);
 App.Group = App.draw.nested();
 App.viewbox = App.draw.viewbox(0, 0, 935, 647);
