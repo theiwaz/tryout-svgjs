@@ -5,6 +5,7 @@ var connect = require("gulp-connect");
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var concat = require('gulp-concat');
+var imagemin = require('gulp-imagemin');
 
 var config = {
     port: 9090,
@@ -12,12 +13,20 @@ var config = {
     paths: {
         html: './source/*.html',
         dist: './dist',
+        source: './source',
+        mainJs: ['./source/main.js'],
         js: ['./source/*.js'],
-        mainJs: './source/main.js',
-        mainCss: './source/main.css',
-        css: ['./node_modules/jquery-ui-dist/*.min.css', './d3-floorplan/**/*.css', './source/*.css']
+        css: ['./source/*.css'],
+        assets: ['./image-assets/**/*.png']
     }
 };
+
+// Imagemin images and ouput them in dist
+gulp.task('imagemin', function() {
+    gulp.src(config.paths.assets)
+        .pipe(imagemin())
+        .pipe(gulp.dest(config.paths.dist + '/images/'));
+});
 
 gulp.task('connect', function() {
 
@@ -42,14 +51,17 @@ gulp.task('html', function() {
         .pipe(connect.reload());
 });
 
-gulp.task('js', function() {
+
+gulp.task('browserify', function() {
     browserify(config.paths.mainJs)
         .bundle()
-        //.on('error', console.error.bind(console))
+        .on('error', console.error.bind(console))
         .pipe(source('bundle.js'))
         .pipe(gulp.dest(config.paths.dist + '/scripts'))
         .pipe(connect.reload());
 });
+
+
 
 gulp.task('css', function() {
     gulp.src(config.paths.css)
@@ -60,8 +72,8 @@ gulp.task('css', function() {
 
 gulp.task('watch', function() {
     gulp.watch(config.paths.html, ['html']);
-    gulp.watch(config.paths.js, ['js']);
+    gulp.watch(config.paths.js, ['browserify']);
     gulp.watch(config.paths.css, ['css']);
 });
 
-gulp.task('default', ['html', 'js', 'css', 'open', 'watch']);
+gulp.task('default', ['imagemin', 'html', 'browserify', 'css', 'open', 'watch']);
